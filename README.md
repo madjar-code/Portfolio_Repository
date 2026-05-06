@@ -75,6 +75,17 @@ App available on port 80.
 - `?start_date_after=YYYY-MM-DD`, `?start_date_before=YYYY-MM-DD`
 - `?page=<n>&page_size=<n>` (default 10, max 100)
 
+## Seed data
+
+Populate the database with 7 sample projects:
+
+```bash
+cd project
+python seed_projects.py
+```
+
+Safe to run multiple times — existing projects are not duplicated.
+
 ## Running tests
 
 ```bash
