@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent  # backend/
+BASE_DIR = Path(__file__).resolve().parent.parent.parent  # project/
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "insecure-default-change-me")
 DEBUG = False

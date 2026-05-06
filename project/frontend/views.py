@@ -7,3 +7,7 @@ class IndexView(TemplateView):
 
 class LoginView(TemplateView):
     template_name = "frontend/login.html"
+
+
+class CreateProjectView(TemplateView):
+    template_name = "frontend/create.html"

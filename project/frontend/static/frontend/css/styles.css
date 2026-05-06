@@ -40,6 +40,7 @@ h1 { margin-top: 0; }
 }
 
 .btn-primary {
+  display: inline-block;
   background: #2563eb;
   color: #fff;
   border: 0;
@@ -47,6 +48,7 @@ h1 { margin-top: 0; }
   padding: 0.55rem 1.1rem;
   font-size: 1rem;
   cursor: pointer;
+  text-decoration: none;
 }
 .btn-primary:hover { background: #1d4ed8; }
 .btn-primary:active { background: #1e40af; }

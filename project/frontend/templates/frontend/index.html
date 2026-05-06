@@ -1,0 +1,29 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}My Projects{% endblock %}
+
+{% block content %}
+  <div id="auth-bar">
+    <span class="anon-only">
+      Not logged in &middot;
+      <a href="{% url 'login' %}">Log in</a>
+    </span>
+    <span class="auth-only" hidden>
+      Logged in as <strong id="current-user"></strong>
+      <button id="logout-btn" type="button" class="btn-secondary">Log out</button>
+    </span>
+  </div>
+
+  <h1>My projects</h1>
+  <p>Hello! My name is Ivan. You can check my projects by clicking the button below.</p>
+  <button class="btn-primary" id="fetch-btn" type="button">Show my projects</button>
+  <a href="{% url 'project-create' %}" class="btn-primary auth-only" hidden>Add a project</a>
+
+  <div id="status" class="status-area"></div>
+  <div id="output" class="output-area"></div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'frontend/js/projects.js' %}"></script>
+{% endblock %}

@@ -4,6 +4,7 @@ const TOKEN_KEY = "portfolio_token";
 const USERNAME_KEY = "portfolio_username";
 const INDEX_URL = "/";
 const LOGIN_URL = "/login/";
+const CREATE_URL = "/projects/new/";
 
 const getToken = () => localStorage.getItem(TOKEN_KEY);
 const setToken = (t) => localStorage.setItem(TOKEN_KEY, t);
@@ -167,25 +168,41 @@ function logout() {
   setStatus("");
 }
 
-async function createProject(payload) {
-  const errorBox = document.getElementById("create-error");
-  errorBox.hidden = true;
-  errorBox.textContent = "";
-  try {
-    const response = await apiFetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      throw new Error(formatErrors(data) || `Create failed (${response.status})`);
-    }
-    document.getElementById("create-form").reset();
-    fetchData();
-  } catch (err) {
-    errorBox.textContent = err.message;
-    errorBox.hidden = false;
+function setupCreatePage() {
+  const form = document.getElementById("create-form");
+  if (!form) return;
+  if (!isAuthed()) {
+    window.location.href = LOGIN_URL;
+    return;
   }
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const errorBox = document.getElementById("create-error");
+    errorBox.hidden = true;
+    errorBox.textContent = "";
+    const fd = new FormData(form);
+    const payload = {
+      name: fd.get("name"),
+      description: fd.get("description"),
+      technologies: fd.get("technologies"),
+      start_date: fd.get("start_date"),
+      end_date: fd.get("end_date") || null,
+    };
+    try {
+      const response = await apiFetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(formatErrors(data) || `Create failed (${response.status})`);
+      }
+      window.location.href = INDEX_URL;
+    } catch (err) {
+      errorBox.textContent = err.message;
+      errorBox.hidden = false;
+    }
+  });
 }
 
 async function deleteProject(id) {
@@ -263,18 +280,6 @@ function setupIndexPage() {
 
   document.getElementById("logout-btn").addEventListener("click", logout);
 
-  document.getElementById("create-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const fd = new FormData(e.target);
-    createProject({
-      name: fd.get("name"),
-      description: fd.get("description"),
-      technologies: fd.get("technologies"),
-      start_date: fd.get("start_date"),
-      end_date: fd.get("end_date") || null,
-    });
-  });
-
   const output = document.getElementById("output");
   output.addEventListener("click", (e) => {
     if (e.target.matches(".edit-btn")) startEdit(e.target.dataset.id);
@@ -292,3 +297,4 @@ function setupIndexPage() {
 updateAuthUI();
 setupLoginPage();
 setupIndexPage();
+setupCreatePage();
