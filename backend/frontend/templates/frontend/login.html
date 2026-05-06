@@ -1,0 +1,26 @@
+{% extends "frontend/base.html" %}
+{% load static %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+  <p><a href="{% url 'index' %}">&larr; Back to projects</a></p>
+  <h1>Log in</h1>
+
+  <form id="login-form" class="auth-form">
+    <label>
+      <span>Username</span>
+      <input id="login-username" autocomplete="username" required />
+    </label>
+    <label>
+      <span>Password</span>
+      <input id="login-password" type="password" autocomplete="current-password" required />
+    </label>
+    <button type="submit" class="btn-primary">Log in</button>
+    <div id="login-error" class="error-banner" hidden></div>
+  </form>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'frontend/js/projects.js' %}"></script>
+{% endblock %}
