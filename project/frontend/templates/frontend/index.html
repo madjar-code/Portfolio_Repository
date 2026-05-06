@@ -17,11 +17,14 @@
 
   <h1>My projects</h1>
   <p>Hello! My name is Ivan. You can check my projects by clicking the button below.</p>
-  <button class="btn-primary" id="fetch-btn" type="button">Show my projects</button>
-  <a href="{% url 'project-create' %}" class="btn-primary auth-only" hidden>Add a project</a>
+  <div class="toolbar">
+    <button class="btn-primary" id="fetch-btn" type="button">Show my projects</button>
+    <a href="{% url 'project-create' %}" class="btn-primary auth-only" hidden>Add a project</a>
+  </div>
 
   <div id="status" class="status-area"></div>
   <div id="output" class="output-area"></div>
+  <div id="pagination" class="pagination-bar"></div>
 {% endblock %}
 
 {% block scripts %}

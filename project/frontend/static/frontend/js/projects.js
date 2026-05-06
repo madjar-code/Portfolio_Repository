@@ -31,6 +31,8 @@ function setStatus(html) {
 function clearOutput() {
   const el = document.getElementById("output");
   if (el) el.innerHTML = "";
+  const pg = document.getElementById("pagination");
+  if (pg) pg.innerHTML = "";
 }
 
 function showElements(selector, visible) {
@@ -108,24 +110,42 @@ function renderProjects(results) {
   output.innerHTML = results.map((p) => projectRowHtml(p, authed)).join("");
 }
 
-async function fetchData() {
+async function fetchData(url) {
+  if (!url) url = API_URL;
   setStatus('<span class="spinner" aria-label="Loading"></span>Loading projects…');
   clearOutput();
   try {
-    const response = await apiFetch(API_URL);
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
+    const response = await apiFetch(url);
+    if (!response.ok) throw new Error(`API error: ${response.status}`);
     const data = await response.json();
     setStatus("");
     renderProjects(data.results || data);
+    renderPagination(data.previous, data.next);
   } catch (err) {
     setStatus("");
     const output = document.getElementById("output");
-    if (output) {
-      output.innerHTML =
-        `<div class="error-banner">Failed to load projects: ${escapeHtml(err.message)}</div>`;
-    }
+    if (output)
+      output.innerHTML = `<div class="error-banner">Failed to load projects: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderPagination(prev, next) {
+  const bar = document.getElementById("pagination");
+  if (!bar) return;
+  bar.innerHTML = "";
+  if (prev) {
+    const btn = document.createElement("button");
+    btn.textContent = "← Previous";
+    btn.className = "btn-secondary";
+    btn.onclick = () => fetchData(prev);
+    bar.appendChild(btn);
+  }
+  if (next) {
+    const btn = document.createElement("button");
+    btn.textContent = "Next →";
+    btn.className = "btn-secondary";
+    btn.onclick = () => fetchData(next);
+    bar.appendChild(btn);
   }
 }
 
@@ -276,7 +296,7 @@ function setupIndexPage() {
   const fetchBtn = document.getElementById("fetch-btn");
   if (!fetchBtn) return;
 
-  fetchBtn.addEventListener("click", fetchData);
+  fetchBtn.addEventListener("click", () => fetchData());
 
   document.getElementById("logout-btn").addEventListener("click", logout);
 
